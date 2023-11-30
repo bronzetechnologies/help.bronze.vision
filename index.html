@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Website</title>
+  </head>
+  <body>
+    <main>
+    </main>
+    <script src="//code.tidio.co/hjpd6d2rqqyw7lbqcwb99dm5khlsjn24.js" async></script>
+    <script>
+    const isElementLoaded = async selector => {
+      while ( document.querySelector(selector) === null) {
+        await new Promise( resolve =>  requestAnimationFrame(resolve) )
+      }
+      return document.querySelector(selector);
+    };
+    const isElementLoadedinIframe = async selector => {
+      while ( document.getElementById('tidio-chat-iframe').contentWindow.document.querySelector(selector) === null) {
+        await new Promise( resolve =>  requestAnimationFrame(resolve) )
+      }
+      return document.querySelector(selector);
+    };
+
+    isElementLoaded('#tidio-chat-iframe').then((selector) => {
+            var iframe = document.getElementById('tidio-chat-iframe').contentWindow.document;
+            isElementLoadedinIframe("#button-body").then((selector) =>{
+                var buttonElement = iframe.getElementById('button-body');
+                buttonElement.click();
+                document.getElementById('tidio-chat-iframe').style.inset=0;
+                document.getElementById('tidio-chat-iframe').style.width="100%";
+                iframe.querySelector('div[role="presentation"]').style.width="90%"
+                iframe.querySelector('div[role="presentation"]').style.boxShadow=""
+
+            })
+    });
+
+
+    </script>    
+</body>
+</html>
