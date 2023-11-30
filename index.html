@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Bronze - Soporte</title>
+    <style>
+      body{
+        margin:20px;
+      }
+    </style>
   </head>
   <body>
     <main>
@@ -30,10 +35,21 @@
                 var buttonElement = iframe.getElementById('button-body');
                 buttonElement.click();
                 setTimeout(function(){
-                  document.getElementById('tidio-chat-iframe').style.inset=0;
-                document.getElementById('tidio-chat-iframe').style.width="100%";
-                iframe.querySelector('div[role="presentation"]').style.width="90%"
+                document.getElementById('tidio-chat-iframe').style.margin="0 auto"
+                document.getElementById('tidio-chat-iframe').style.inset=0;
+                document.getElementById('tidio-chat-iframe').style.marginTop="10px"
+
+                document.getElementById('tidio-chat-iframe').style.height="900px";
+                document.getElementById('tidio-chat-iframe').style.width="800px";
+                iframe.querySelector('div[role="presentation"]').style.width="100%"
+                iframe.querySelector('div[role="presentation"]').style.boxShadow="none"
+                iframe.querySelector('div[role="presentation"]').style.bottom="0"
+                iframe.querySelector('div[role="presentation"]').style.top="20px"
+                iframe.querySelector('div[role="presentation"]').style.right="30px"
+                iframe.querySelector('div[role="presentation"]').style.left="0px"
                 iframe.querySelector('div[role="presentation"]').style.boxShadow=""
+                iframe.querySelector('div[role="presentation"]').style.inset="0px 30px 0px 0px"
+
                 }, 100);
                 
 
