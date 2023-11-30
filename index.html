@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Website</title>
+    <title>Bronze - Soporte</title>
   </head>
   <body>
     <main>
@@ -29,10 +29,13 @@
             isElementLoadedinIframe("#button-body").then((selector) =>{
                 var buttonElement = iframe.getElementById('button-body');
                 buttonElement.click();
-                document.getElementById('tidio-chat-iframe').style.inset=0;
+                setTimeout(function(){
+                  document.getElementById('tidio-chat-iframe').style.inset=0;
                 document.getElementById('tidio-chat-iframe').style.width="100%";
                 iframe.querySelector('div[role="presentation"]').style.width="90%"
                 iframe.querySelector('div[role="presentation"]').style.boxShadow=""
+                }, 100);
+                
 
             })
     });
