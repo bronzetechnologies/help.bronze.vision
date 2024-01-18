@@ -26,14 +26,14 @@
       while ( document.getElementById('tidio-chat-iframe').contentWindow.document.querySelector(selector) === null) {
         await new Promise( resolve =>  requestAnimationFrame(resolve) )
       }
-      return document.querySelector(selector);
+      return  document.getElementById('tidio-chat-iframe').contentWindow.document.querySelector(selector);
     };
 
     isElementLoaded('#tidio-chat-iframe').then((selector) => {
             var iframe = document.getElementById('tidio-chat-iframe').contentWindow.document;
             isElementLoadedinIframe("#button-body").then((selector) =>{
                 var buttonElement = iframe.getElementById('button-body');
-                buttonElement.click();
+                selector.click();
                 setTimeout(function(){
                 document.getElementById('tidio-chat-iframe').style.margin="0 auto"
                 document.getElementById('tidio-chat-iframe').style.inset=0;
@@ -50,7 +50,7 @@
                 iframe.querySelector('div[role="presentation"]').style.boxShadow=""
                 iframe.querySelector('div[role="presentation"]').style.inset="0px 30px 0px 0px"
 
-                }, 100);
+                }, 200);
                 
 
             })
