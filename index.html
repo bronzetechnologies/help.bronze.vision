@@ -16,47 +16,74 @@
     </main>
     <script src="//code.tidio.co/hjpd6d2rqqyw7lbqcwb99dm5khlsjn24.js" async></script>
     <script>
-    const isElementLoaded = async selector => {
-      while ( document.querySelector(selector) === null) {
-        await new Promise( resolve =>  requestAnimationFrame(resolve) )
+    const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    const isElementLoaded = async (selector, maxAttempts = 50, interval = 100) => {
+      for (let i = 0; i < maxAttempts; i++) {
+        const element = document.querySelector(selector);
+        if (element) return element;
+        await wait(interval);
       }
-      return document.querySelector(selector);
-    };
-    const isElementLoadedinIframe = async selector => {
-      while ( document.getElementById('tidio-chat-iframe').contentWindow.document.querySelector(selector) === null) {
-        await new Promise( resolve =>  requestAnimationFrame(resolve) )
-      }
-      return  document.getElementById('tidio-chat-iframe').contentWindow.document.querySelector(selector);
+      throw new Error(`Element ${selector} not found after ${maxAttempts} attempts`);
     };
 
-    isElementLoaded('#tidio-chat-iframe').then((selector) => {
-            var iframe = document.getElementById('tidio-chat-iframe').contentWindow.document;
-            isElementLoadedinIframe("#button-body").then((selector) =>{
-                var buttonElement = iframe.getElementById('button-body');
-                selector.click();
-                isElementLoadedinIframe('div[role="presentation"]').then((selector) =>{
-                  document.getElementById('tidio-chat-iframe').style.margin="0 auto"
-                  document.getElementById('tidio-chat-iframe').style.inset=0;
-                  document.getElementById('tidio-chat-iframe').style.marginTop="0px"
+    const isElementLoadedinIframe = async (selector, maxAttempts = 50, interval = 100) => {
+      for (let i = 0; i < maxAttempts; i++) {
+        const iframe = document.getElementById('tidio-chat-iframe');
+        if (iframe && iframe.contentWindow && iframe.contentWindow.document) {
+          const element = iframe.contentWindow.document.querySelector(selector);
+          if (element) return element;
+        }
+        await wait(interval);
+      }
+      throw new Error(`Element ${selector} not found in iframe after ${maxAttempts} attempts`);
+    };
 
-                  document.getElementById('tidio-chat-iframe').style.height="100%";
-                  document.getElementById('tidio-chat-iframe').style.width="100%";
-                  iframe.querySelector('div[role="presentation"]').style.width="100%"
-                  iframe.querySelector('div[role="presentation"]').style.boxShadow="none"
-                  iframe.querySelector('div[role="presentation"]').style.bottom="0"
-                  iframe.querySelector('div[role="presentation"]').style.top="20px"
-                  iframe.querySelector('div[role="presentation"]').style.right="30px"
-                  iframe.querySelector('div[role="presentation"]').style.left="0px"
-                  iframe.querySelector('div[role="presentation"]').style.boxShadow=""
-                  iframe.querySelector('div[role="presentation"]').style.inset="0px 30px 0px 0px"
+    const retryOperation = async (operation, maxRetries = 3, delay = 1000) => {
+      for (let i = 0; i < maxRetries; i++) {
+        try {
+          return await operation();
+        } catch (error) {
+          if (i === maxRetries - 1) throw error;
+          console.warn(`Attempt ${i + 1} failed. Retrying in ${delay}ms...`);
+          await wait(delay);
+        }
+      }
+    };
 
-                });
-                
+    const setupTidioChat = async () => {
+      const iframe = await isElementLoaded('#tidio-chat-iframe');
+      
+      const buttonElement = await isElementLoadedinIframe("#button-body");
+      buttonElement.click();
 
-            })
+      const presentationDiv = await isElementLoadedinIframe('div[role="presentation"]');
+      
+      iframe.style.margin = "0 auto";
+      iframe.style.inset = "0";
+      iframe.style.marginTop = "0px";
+      iframe.style.height = "100%";
+      iframe.style.width = "100%";
+      
+      presentationDiv.style.width = "100%";
+      presentationDiv.style.boxShadow = "none";
+      presentationDiv.style.bottom = "0";
+      presentationDiv.style.top = "20px";
+      presentationDiv.style.right = "30px";
+      presentationDiv.style.left = "0px";
+      presentationDiv.style.inset = "0px 30px 0px 0px";
+
+      console.log("Tidio chat setup completed successfully");
+    };
+
+    // Main execution
+    window.addEventListener('load', async () => {
+      try {
+        await retryOperation(setupTidioChat);
+      } catch (error) {
+        console.error("Failed to set up Tidio chat:", error);
+      }
     });
-
-
     </script>    
-</body>
+  </body>
 </html>
